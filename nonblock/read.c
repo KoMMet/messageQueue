@@ -8,6 +8,10 @@ int main(){
   struct mq_attr attr= { .mq_maxmsg = 10, .mq_msgsize = 1};
   mqd_t recvq;
 
+  struct timespec t = {
+    .tv_sec = 0,
+    .tv_nsec = 10000,
+  };
   recvq = mq_open("/test", O_RDONLY|O_CREAT, 0677, &attr);
   mq_getattr(recvq, &attr);
 
@@ -17,10 +21,9 @@ int main(){
 
   while(1)
   {
-    puts("in");
     int prio = 1;
-    int r = mq_receive(recvq, buff, attr.mq_msgsize, &prio);
-    if(r == -1) {printf("rec err %m\n"); break;}
+    int r = mq_timedreceive(recvq, buff, attr.mq_msgsize, &prio, &t);
+    if(r == -1) { continue;}
     printf("%c\n", buff[0]);
     c++;
     if(c > 5) break;

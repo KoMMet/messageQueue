@@ -10,7 +10,7 @@ int main(void)
   int r = 0;
   char name[] = "/test";
   struct mq_attr attr = { .mq_maxmsg = 10, .mq_msgsize = 1};
-  mqd_t q = mq_open(name,  O_WRONLY, 0600, &attr);
+  mqd_t q = mq_open(name,  O_WRONLY, NULL, &attr);
   if(q == (mqd_t) -1)
   {
     printf("err %m\n");
